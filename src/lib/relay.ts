@@ -3,23 +3,26 @@ import { Environment, Network, RecordSource, Store } from "relay-runtime";
 
 let relayEnvironment: Environment;
 
+type FetchQuery = Parameters<typeof Network.create>[0];
+
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise
-function fetchQuery(operation, variables, cacheConfig, uploadables) {
-  return fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT, {
+const fetchQuery: FetchQuery = async (operation, variables) => {
+  const response = await fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT!, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-    }, // Add authentication and other headers here
+    },
     body: JSON.stringify({
-      query: operation.text, // GraphQL text from input
+      query: operation.text,
       variables,
     }),
-  }).then((response) => response.json());
-}
+  });
+  return await response.json();
+};
 
-function createEnvironment(initialRecords): Environment {
+function createEnvironment(initialRecords: any): Environment {
   return new Environment({
     // Create a network layer from the fetch function
     network: Network.create(fetchQuery),
@@ -44,7 +47,7 @@ export function initEnvironment(initialRecords?: any): Environment {
   return relayEnvironment;
 }
 
-export function useEnvironment(initialRecords): Environment {
+export function useEnvironment(initialRecords: any): Environment {
   const store = useMemo(() => initEnvironment(initialRecords), [
     initialRecords,
   ]);

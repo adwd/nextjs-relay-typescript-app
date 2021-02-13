@@ -16,9 +16,9 @@ const blogPageQuery = graphql`
   }
 `;
 
-type Props = blogQueryResponse;
+type Props = { data: blogQueryResponse };
 
-const Blog = ({ viewer }: Props) => (
+const Blog = ({ data: { viewer } }: Props) => (
   <div>
     <Link href="/">
       <a>home</a>
@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
   return {
     props: {
-      ...data,
+      data,
       initialRecords,
     },
   };

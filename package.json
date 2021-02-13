@@ -6,7 +6,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "relay": "yarn run relay-compiler --schema ./schema/schema.graphql --src ./src/ --language typescript --artifactDirectory ./src/lib/__generated__ --watchman false $@",
+    "relay": "yarn run relay-compiler --schema ./schema/schema.graphql --src ./src/ --language typescript --artifactDirectory ./src/lib/__generated__ --customScalars.DateTime=String --watchman false $@",
     "schema": "graphql get-schema -e dev"
   },
   "license": "MIT",

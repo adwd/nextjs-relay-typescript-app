@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { graphql } from "react-relay";
 import { useFragment } from "react-relay/hooks";
 import { BlogPostPreview_post$key } from "../lib/__generated__/BlogPostPreview_post.graphql";
@@ -16,5 +17,11 @@ export const BlogPostPreview = ({ post }: Props) => {
     `,
     post
   );
-  return <li>{data.title}</li>;
+  return (
+    <li>
+      <Link href={`/blog/${data.id}`}>
+        <a>{data.title}</a>
+      </Link>
+    </li>
+  );
 };
