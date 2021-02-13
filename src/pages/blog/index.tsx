@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { fetchQuery, graphql } from "react-relay";
 import { initEnvironment } from "../../lib/relay";
-import BlogPosts from "../../components/BlogPosts";
+import { BlogPosts } from "../../components/BlogPosts";
 import {
   blogQuery,
   blogQueryResponse,
 } from "../../lib/__generated__/blogQuery.graphql";
+import { GetStaticProps } from "next";
 
 const blogPageQuery = graphql`
   query blogQuery {
@@ -15,7 +16,9 @@ const blogPageQuery = graphql`
   }
 `;
 
-const Blog = ({ viewer }: blogQueryResponse) => (
+type Props = blogQueryResponse;
+
+const Blog = ({ viewer }: Props) => (
   <div>
     <Link href="/">
       <a>home</a>
@@ -24,9 +27,9 @@ const Blog = ({ viewer }: blogQueryResponse) => (
   </div>
 );
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps<Props> = async () => {
   const environment = initEnvironment();
-  const { viewer } = await fetchQuery<blogQuery>(
+  const data = await fetchQuery<blogQuery>(
     environment,
     blogPageQuery,
     {},
@@ -34,17 +37,12 @@ export async function getStaticProps() {
   );
   const initialRecords = environment.getStore().getSource().toJSON();
 
-  console.log({
-    viewer,
-    initialRecords,
-  });
-
   return {
     props: {
-      viewer,
+      ...data,
       initialRecords,
     },
   };
-}
+};
 
 export default Blog;

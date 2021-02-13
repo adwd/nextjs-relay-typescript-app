@@ -1,15 +1,20 @@
-import { createFragmentContainer, graphql } from "react-relay";
-import { BlogPostPreview_post } from "../lib/__generated__/BlogPostPreview_post.graphql";
+import { graphql } from "react-relay";
+import { useFragment } from "react-relay/hooks";
+import { BlogPostPreview_post$key } from "../lib/__generated__/BlogPostPreview_post.graphql";
 
-const BlogPostPreview = ({ post }: { post: BlogPostPreview_post }) => (
-  <li>{post.title}</li>
-);
+type Props = {
+  post: BlogPostPreview_post$key;
+};
 
-export default createFragmentContainer(BlogPostPreview, {
-  post: graphql`
-    fragment BlogPostPreview_post on BlogPost {
-      id
-      title
-    }
-  `,
-});
+export const BlogPostPreview = ({ post }: Props) => {
+  const data = useFragment(
+    graphql`
+      fragment BlogPostPreview_post on BlogPost {
+        id
+        title
+      }
+    `,
+    post
+  );
+  return <li>{data.title}</li>;
+};
