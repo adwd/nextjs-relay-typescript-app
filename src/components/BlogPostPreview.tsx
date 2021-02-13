@@ -1,6 +1,9 @@
-import { createFragmentContainer, graphql } from 'react-relay'
+import { createFragmentContainer, graphql } from "react-relay";
+import { BlogPostPreview_post } from "../lib/__generated__/BlogPostPreview_post.graphql";
 
-const BlogPostPreview = ({ post }) => <li>{post.title}</li>
+const BlogPostPreview = ({ post }: { post: BlogPostPreview_post }) => (
+  <li>{post.title}</li>
+);
 
 export default createFragmentContainer(BlogPostPreview, {
   post: graphql`
@@ -9,4 +12,4 @@ export default createFragmentContainer(BlogPostPreview, {
       title
     }
   `,
-})
+});

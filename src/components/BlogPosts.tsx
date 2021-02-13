@@ -1,16 +1,17 @@
-import { createFragmentContainer, graphql } from 'react-relay'
-import BlogPostPreview from './BlogPostPreview'
+import { createFragmentContainer, graphql } from "react-relay";
+import { BlogPosts_viewer } from "../lib/__generated__/BlogPosts_viewer.graphql";
+import BlogPostPreview from "./BlogPostPreview";
 
-const BlogPosts = ({ viewer }) => (
+const BlogPosts = ({ viewer }: { viewer: BlogPosts_viewer }) => (
   <div>
     <h1>Blog posts</h1>
     <ul>
-      {viewer.allBlogPosts.edges.map(({ node }) => (
-        <BlogPostPreview key={node.id} post={node} />
+      {viewer.allBlogPosts?.edges?.map((e) => (
+        <BlogPostPreview key={e?.node.id} post={e?.node!} />
       ))}
     </ul>
   </div>
-)
+);
 
 export default createFragmentContainer(BlogPosts, {
   viewer: graphql`
@@ -25,4 +26,4 @@ export default createFragmentContainer(BlogPosts, {
       }
     }
   `,
-})
+});

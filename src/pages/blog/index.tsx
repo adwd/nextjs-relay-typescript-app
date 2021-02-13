@@ -2,7 +2,10 @@ import Link from "next/link";
 import { fetchQuery, graphql } from "react-relay";
 import { initEnvironment } from "../../lib/relay";
 import BlogPosts from "../../components/BlogPosts";
-import { blogQuery } from "../../lib/__generated__/blogQuery.graphql";
+import {
+  blogQuery,
+  blogQueryResponse,
+} from "../../lib/__generated__/blogQuery.graphql";
 
 const blogPageQuery = graphql`
   query blogQuery {
@@ -12,7 +15,7 @@ const blogPageQuery = graphql`
   }
 `;
 
-const Blog = ({ viewer }) => (
+const Blog = ({ viewer }: blogQueryResponse) => (
   <div>
     <Link href="/">
       <a>home</a>
