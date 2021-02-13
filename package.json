@@ -6,20 +6,24 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "relay": "relay-compiler --src ./ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql",
+    "relay": "yarn run relay-compiler --schema ./schema/schema.graphql --src ./src/ --language typescript --artifactDirectory ./src/lib/__generated__ --watchman false $@",
     "schema": "graphql get-schema -e dev"
   },
   "license": "MIT",
   "dependencies": {
-    "graphql": "^14.6.0",
+    "graphql": "^15.5.0",
     "next": "latest",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "react-relay": "^9.0.0"
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-relay": "^0.0.0-experimental-4c4107dd"
   },
   "devDependencies": {
-    "babel-plugin-relay": "^9.0.0",
-    "graphql-cli": "^3.0.14",
-    "relay-compiler": "^9.0.0"
+    "@types/react": "^17.0.2",
+    "@types/react-relay": "^7.0.17",
+    "babel-plugin-relay": "^10.1.3",
+    "graphql-cli": "^4.1.0",
+    "relay-compiler": "^10.1.3",
+    "relay-compiler-language-typescript": "^13.0.4",
+    "typescript": "^4.1.5"
   }
 }
