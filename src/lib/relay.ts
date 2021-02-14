@@ -1,14 +1,16 @@
 import { useMemo } from "react";
 import { Environment, Network, RecordSource, Store } from "relay-runtime";
+import { config } from "./config";
 
 let relayEnvironment: Environment;
 
 type FetchQuery = Parameters<typeof Network.create>[0];
+type Record = ConstructorParameters<typeof RecordSource>[0];
 
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise
 const fetchQuery: FetchQuery = async (operation, variables) => {
-  const response = await fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT!, {
+  const response = await fetch(config.endpoint, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -22,15 +24,15 @@ const fetchQuery: FetchQuery = async (operation, variables) => {
   return await response.json();
 };
 
-function createEnvironment(initialRecords: any): Environment {
+function createEnvironment(initialRecords: Record): Environment {
   return new Environment({
     // Create a network layer from the fetch function
     network: Network.create(fetchQuery),
-    store: new Store(new RecordSource()),
+    store: new Store(new RecordSource(initialRecords)),
   });
 }
 
-export function initEnvironment(initialRecords?: any): Environment {
+export function initEnvironment(initialRecords?: Record): Environment {
   // Create a network layer from the fetch function
   const environment = relayEnvironment ?? createEnvironment(initialRecords);
 
@@ -47,9 +49,7 @@ export function initEnvironment(initialRecords?: any): Environment {
   return relayEnvironment;
 }
 
-export function useEnvironment(initialRecords: any): Environment {
-  const store = useMemo(() => initEnvironment(initialRecords), [
-    initialRecords,
-  ]);
+export function useEnvironment(initialRecords?: Record): Environment {
+  const store = useMemo(() => initEnvironment(initialRecords), [initialRecords]);
   return store;
 }
