@@ -11,7 +11,9 @@ import { GetStaticProps } from "next";
 const blogPageQuery = graphql`
   query blogQuery {
     viewer {
-      ...BlogPosts_viewer
+      allBlogPosts(first: 10, orderBy: { createdAt: desc }) {
+        ...BlogPosts_blogPostConnection
+      }
     }
   }
 `;
@@ -23,7 +25,7 @@ const Blog = ({ data: { viewer } }: Props) => (
     <Link href="/">
       <a>home</a>
     </Link>
-    <BlogPosts viewer={viewer} />
+    <BlogPosts blogPostConnection={viewer.allBlogPosts} />
   </div>
 );
 
