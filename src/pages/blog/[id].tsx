@@ -33,9 +33,7 @@ export default function BlogPostPage(props: Props) {
   );
 }
 
-export const getStaticProps: GetStaticProps<Props, { id: string }> = async (
-  ctx
-) => {
+export const getStaticProps: GetStaticProps<Props, { id: string }> = async (ctx) => {
   const environment = initEnvironment();
   const id = ctx.params?.id;
   if (!id) {
@@ -44,12 +42,7 @@ export const getStaticProps: GetStaticProps<Props, { id: string }> = async (
     };
   }
 
-  const data = await fetchQuery<BlogPostQuery>(
-    environment,
-    blogPostQuery,
-    { id },
-    null
-  );
+  const data = await fetchQuery<BlogPostQuery>(environment, blogPostQuery, { id }, null);
   const initialRecords = environment.getStore().getSource().toJSON();
 
   return {
