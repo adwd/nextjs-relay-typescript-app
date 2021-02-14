@@ -1,35 +1,42 @@
 import { graphql } from "react-relay";
-import { useFragment } from "react-relay/hooks";
-import { BlogPosts_blogPostConnection$key } from "../lib/__generated__/BlogPosts_blogPostConnection.graphql";
+import { usePaginationFragment } from "react-relay/hooks";
+import { BlogPosts_Viewer$key } from "../lib/__generated__/BlogPosts_Viewer.graphql";
 import { BlogPostPreview } from "./BlogPostPreview";
 
 type Props = {
-  blogPostConnection: BlogPosts_blogPostConnection$key;
+  blogPosts: BlogPosts_Viewer$key;
 };
 
-export const BlogPosts = ({ blogPostConnection }: Props) => {
-  const data = useFragment(
+export const BlogPosts = ({ blogPosts }: Props) => {
+  const { data, loadNext, loadPrevious, hasNext, hasPrevious } = usePaginationFragment(
     graphql`
-      fragment BlogPosts_blogPostConnection on BlogPostConnection {
-        edges {
-          node {
-            ...BlogPostPreview_post
-            id
+      fragment BlogPosts_Viewer on Viewer @refetchable(queryName: "BlogPostsPaginationQuery") {
+        allBlogPosts(orderBy: $orderBy, first: $first, after: $after)
+          @connection(key: "BlogQuery_viewer_allBlogPosts") {
+          edges {
+            node {
+              ...BlogPostPreview_post
+              id
+            }
           }
         }
       }
     `,
-    blogPostConnection
+    blogPosts
   );
 
   return (
     <div>
       <h1>Blog posts</h1>
       <ul>
-        {data.edges?.map((e: any) => (
+        {data.allBlogPosts.edges?.map((e: any) => (
           <BlogPostPreview key={e?.node.id} post={e?.node!} />
         ))}
       </ul>
+      <div>
+        {hasPrevious ? <button onClick={() => loadPrevious(10)}>previous</button> : null}
+        {hasNext ? <button onClick={() => loadNext(10)}>next</button> : null}
+      </div>
     </div>
   );
 };
